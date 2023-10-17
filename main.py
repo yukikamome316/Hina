@@ -53,33 +53,6 @@ async def on_ready():
 
 """
 @bot.event
-async def on_message(msg):
-    if msg.author.bot == False:
-        A = ["お早う","おはよ"]
-        B = "こんにちは"
-        C = "おそよう"
-        D = ["おやすみ", "寝る", "寝ます"]
-        E = "こんばんは"
-        
-        for a in A:
-            if msg.content.find(a) >= 0:
-                await msg.channel.send("おはよう！")
-                break
-        if msg.content.find(B) >= 0:
-            await msg.channel.send("こんにちは！")
-        if msg.content.find(C) >= 0:
-            await msg.channel.send("おそよう！w")
-        for d in D:
-            if msg.content.find(d) >= 0:
-                await msg.channel.send("おやすみ！")
-                break
-        if msg.content.find(E) >= 0:
-            await msg.channel.send("こんばんは！")
-"""
-
-
-"""
-@bot.event
 async def on_raw_reaction_add(payload):
     message_id = payload.message_id
     if message_id == 596737713525358600:
