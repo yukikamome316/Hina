@@ -363,12 +363,7 @@ async def status(ctx, name: str):
 @sys.command()
 async def echo(ctx, text: str):
     await ctx.send(text)
-
-
-@sys.command()
-async def invite(ctx):
-    await ctx.send('https://discordapp.com/api/oauth2/authorize?client_id=684707685316558878&permissions=8&scope=bot')
-
+    
 
 @sys.command()
 async def inroot(ctx):
