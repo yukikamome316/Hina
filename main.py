@@ -211,85 +211,85 @@ async def date(ctx):
 imgscr_ready = True
 
 
-@bot.command()
-async def imgscr(ctx, engine: str, keyword: str, limit: int, opt: typing.Optional[str] = None):
-    global imgscr_ready
-    if imgscr_ready == True:
-        imgscr_ready = False
-        msg = await ctx.send("スクレイピングを開始します...")
+# @bot.command()
+# async def imgscr(ctx, engine: str, keyword: str, limit: int, opt: typing.Optional[str] = None):
+#     global imgscr_ready
+#     if imgscr_ready == True:
+#         imgscr_ready = False
+#         msg = await ctx.send("スクレイピングを開始します...")
 
-        subprocess.call(["python", "python_image_webscraping-master/src/SearchEngineClass.py",
-                         engine, keyword, str(limit)])  # Windowsでは"\"
+#         subprocess.call(["python", "python_image_webscraping-master/src/SearchEngineClass.py",
+#                          engine, keyword, str(limit)])  # Windowsでは"\"
 
-        if os.path.isdir("python_image_webscraping-master/download/image/{}".format((keyword.replace("　", "_")).replace(" ", "_"))) == True:
-            for filename in glob.glob('python_image_webscraping-master/download/image/{}/*.*'.format((keyword.replace("　", "_")).replace(" ", "_"))):
-                with open(filename, 'rb') as input:
-                    if opt == None:
-                        dmch = await ctx.message.author.create_dm()
-                        await dmch.send(file=discord.File(input, f"{filename}.png"))
-                    elif opt == "/h":
-                        await ctx.send(file=discord.File(input, f"{filename}.png"))
-                    else:
-                        await ctx.send('(!)コマンドライン引数"{}"は定義されてないよ'.format(str(opt)))
+#         if os.path.isdir("python_image_webscraping-master/download/image/{}".format((keyword.replace("　", "_")).replace(" ", "_"))) == True:
+#             for filename in glob.glob('python_image_webscraping-master/download/image/{}/*.*'.format((keyword.replace("　", "_")).replace(" ", "_"))):
+#                 with open(filename, 'rb') as input:
+#                     if opt == None:
+#                         dmch = await ctx.message.author.create_dm()
+#                         await dmch.send(file=discord.File(input, f"{filename}.png"))
+#                     elif opt == "/h":
+#                         await ctx.send(file=discord.File(input, f"{filename}.png"))
+#                     else:
+#                         await ctx.send('(!)コマンドライン引数"{}"は定義されてないよ'.format(str(opt)))
 
-            shutil.rmtree("python_image_webscraping-master/download/image/{}".format(
-                (keyword.replace("　", "_")).replace(" ", "_")))
+#             shutil.rmtree("python_image_webscraping-master/download/image/{}".format(
+#                 (keyword.replace("　", "_")).replace(" ", "_")))
 
-            imgscr_ready = True
+#             imgscr_ready = True
 
-            await msg.delete()
+#             await msg.delete()
 
-    else:
-        await ctx.send("(!)しばらく時間を空けてからもう一度試してね")
-
-
-mp3_current_num = 0
-mp4_current_num = 0
+#     else:
+#         await ctx.send("(!)しばらく時間を空けてからもう一度試してね")
 
 
-@bot.command()
-async def ytscr(ctx, mode: str, link: str):
-    if mode == "mp4":
-        global mp4_current_num
-        mp4_current_num += 1
-        num = str(mp4_current_num)
+# mp3_current_num = 0
+# mp4_current_num = 0
 
-        ydl = youtube_dl.YoutubeDL(
-            {'outtmpl': num + '.%(ext)s', 'format': 'bestvideo+bestaudio', 'merge-output-format': 'mkv'})
-        with ydl:
-            result = ydl.extract_info(
-                link,
-                download=True  # We just want to extract the info
-            )
 
-        with open("{}.mkv".format(num), 'rb') as f:
-            await ctx.send(file=discord.File(f, "{}.mp4".format(num)))
+# @bot.command()
+# async def ytscr(ctx, mode: str, link: str):
+#     if mode == "mp4":
+#         global mp4_current_num
+#         mp4_current_num += 1
+#         num = str(mp4_current_num)
 
-        os.remove("{}.mkv".format(num))
+#         ydl = youtube_dl.YoutubeDL(
+#             {'outtmpl': num + '.%(ext)s', 'format': 'bestvideo+bestaudio', 'merge-output-format': 'mkv'})
+#         with ydl:
+#             result = ydl.extract_info(
+#                 link,
+#                 download=True  # We just want to extract the info
+#             )
 
-    elif mode == "mp3":
-        global mp3_current_num
-        mp3_current_num += 1
-        num = str(mp3_current_num)
+#         with open("{}.mkv".format(num), 'rb') as f:
+#             await ctx.send(file=discord.File(f, "{}.mp4".format(num)))
 
-        ydl_opts = {
-            'format': 'bestaudio/best',
-            'outtmpl': num + '.%(ext)s',
-            'postprocessors': [
-                {'key': 'FFmpegExtractAudio',
-                 'preferredcodec': 'mp3',
-                 'preferredquality': '192'},
-                {'key': 'FFmpegMetadata'},
-            ],
-        }
+#         os.remove("{}.mkv".format(num))
 
-        ydl = youtube_dl.YoutubeDL(ydl_opts)
-        info_dict = ydl.extract_info(link, download=True)
+#     elif mode == "mp3":
+#         global mp3_current_num
+#         mp3_current_num += 1
+#         num = str(mp3_current_num)
 
-        with open("{}.mp3".format(num), 'rb') as f:
-            await ctx.send(file=discord.File(f, "{}.mp3".format(num)))
+#         ydl_opts = {
+#             'format': 'bestaudio/best',
+#             'outtmpl': num + '.%(ext)s',
+#             'postprocessors': [
+#                 {'key': 'FFmpegExtractAudio',
+#                  'preferredcodec': 'mp3',
+#                  'preferredquality': '192'},
+#                 {'key': 'FFmpegMetadata'},
+#             ],
+#         }
 
-        os.remove("{}.mp3".format(num))
+#         ydl = youtube_dl.YoutubeDL(ydl_opts)
+#         info_dict = ydl.extract_info(link, download=True)
+
+#         with open("{}.mp3".format(num), 'rb') as f:
+#             await ctx.send(file=discord.File(f, "{}.mp3".format(num)))
+
+#         os.remove("{}.mp3".format(num))
 
 
 @bot.command()
@@ -363,7 +363,7 @@ async def status(ctx, name: str):
 @sys.command()
 async def echo(ctx, text: str):
     await ctx.send(text)
-    
+
 
 @sys.command()
 async def inroot(ctx):
